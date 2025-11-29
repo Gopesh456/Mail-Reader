@@ -1,0 +1,29 @@
+[project]
+name = "mailreader"
+version = "0.1.0"
+description = "mailReader using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]==1.2.1",
+    "google-api-python-client>=2.187.0",
+    "google-auth-oauthlib>=1.2.3",
+    "litellm>=1.80.5",
+    "py-pushover-simple>=0.5.0",
+    "python-dotenv>=1.2.1",
+]
+
+[project.scripts]
+mailreader = "mailreader.main:run"
+run_crew = "mailreader.main:run"
+train = "mailreader.main:train"
+replay = "mailreader.main:replay"
+test = "mailreader.main:test"
+run_with_trigger = "mailreader.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

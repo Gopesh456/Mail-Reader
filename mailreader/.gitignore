@@ -1,0 +1,6 @@
+.env
+__pycache__/
+.DS_Store
+calendar_token.pickle
+token.pickle
+credentials.json

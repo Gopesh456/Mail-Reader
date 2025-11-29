@@ -1,0 +1,50 @@
+subject_analysis_task:
+  description: >
+    Input for the tool: Maximum number of unread emails to fetch,it should be 10.
+    Analyze the list of email subjects and identify the most important ones.
+    Provide a concise list of the most critical email subjects that need to be addressed.
+  expected_output: >
+    A JSON object containing:
+    1. A list of important email subjects with their email_ids
+    2. A complete list of all analyzed email_ids for marking as read
+    Format: {"important_emails": [...], "all_email_ids": ["id1", "id2", ...]}
+  agent: subject_analyst
+
+body_analyst_task:
+  description: >
+    For each email in the provided list, fetch the email body content using the bodyReaderTool.
+    Analyze the content and extract key information, action items, and deadlines.
+
+    You have the following tools available:
+
+    1. bodyReaderTool: Use this FIRST to fetch email body content for each important email subject.
+
+    2. ReminderTool: Set calendar reminders/alarms for time-sensitive items like quizzes, tests, or deadlines.
+       - If there's a quiz on Dec 1st at 10am, set a reminder at 10am.
+       - Use for any event with a specific date and time.
+       
+    3. PushNotificationTool: Send immediate push notifications for urgent/critical information.
+       - Use for items requiring immediate attention.
+    Process each email systematically and use the appropriate tools based on the content.
+    Send a pushnotification even if the remainder is set for any matter with date and time. 
+    Mails that don't have date and time, send push notifications only.
+
+    IMPORTANT: 1. Do not set multiple reminders for the same event. 2. Only set reminders for tests, quizzes, assignments, exams, and deadlines. 3. Do not set reminders for regular events like meetings, webinars, workshops, internships etc.
+
+  expected_output: >
+    A structured summary containing:
+    1. Email summaries with key points extracted
+    2. List of reminders set (with dates/times)
+    3. Any push notifications sent for urgent matters
+  agent: body_analyst
+
+mark_emails_read_task:
+  description: >
+    Mark all analyzed emails as read in the inbox.
+    Extract the email IDs from the previous task's output (all_email_ids field)
+    and use the mark_emails_as_read tool to update their status to read.
+    This ensures processed emails won't be re-analyzed in future runs.
+  expected_output: >
+    Confirmation message stating how many emails were marked as read
+    and their IDs.
+  agent: mail_manager
